@@ -45,12 +45,7 @@ pipeline {
     }
 
     stage('Build Docker Image') {
-      agent {
-        node {
-          label 'master'
-        }
-
-      }
+      agent any
       steps {
         script {
           app = docker.build("aldanar1/currency-exchange-devops")
