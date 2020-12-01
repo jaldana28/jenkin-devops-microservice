@@ -1,10 +1,11 @@
 pipeline {
   agent {
-        docker {
-            image 'maven:3-alpine' 
-            args '-v /root/.m2:/root/.m2' 
-        }
+    docker {
+      image 'maven:3-alpine'
+      args '-v /root/.m2:/root/.m2'
     }
+
+  }
   stages {
     stage('Checkout') {
       steps {
@@ -43,33 +44,38 @@ pipeline {
       }
     }
 
-stage('Build Docker Image') {
-    agent { 
-        label 'master' 
-       }
-            steps {
-                script {
-                    app = docker.build("aldanar1/currency-exchange-devops")
-                    app.inside {
-                        sh 'echo $(curl localhost:8000)'
-                    }
-                }
-            }
+    stage('Build Docker Image') {
+      agent {
+        node {
+          label 'master'
         }
 
- stage('Push Docker Image') {
-      agent { 
-        label 'master' 
-       }
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-                    }
-                }
-            }
-        }    
+      }
+      steps {
+        script {
+          app = docker.build("aldanar1/currency-exchange-devops")
+          app.inside {
+            sh 'echo $(curl localhost:8000)'
+          }
+        }
+
+      }
+    }
+
+    stage('Push Docker Image') {
+      agent {
+        label 'master'
+      }
+      steps {
+        script {
+          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
+          }
+        }
+
+      }
+    }
 
   }
 }
