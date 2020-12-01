@@ -44,6 +44,9 @@ pipeline {
     }
 
 stage('Build Docker Image') {
+    agent { 
+        label 'master' 
+       }
             steps {
                 script {
                     app = docker.build("aldanar1/currency-exchange-devops")
@@ -55,6 +58,9 @@ stage('Build Docker Image') {
         }
 
  stage('Push Docker Image') {
+      agent { 
+        label 'master' 
+       }
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
