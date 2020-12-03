@@ -48,10 +48,15 @@ pipeline {
     }
 
     stage('Build Docker Image') {
-      agent any
+       agent {
+                docker {
+                    image 'maven:3.5.2'
+                    args '-v /var/jenkins_home/workspace/test:/opt/maven -w /opt/maven'
+                    reuseNode true
+                }
+            }
       steps {
         script {
-	  sh 'pwd'	
           app = docker.build("aldanar1/currency-exchange-devops:${env.BUILD_TAG}")
           app.inside {
             sh 'echo $(curl localhost:8000)'
