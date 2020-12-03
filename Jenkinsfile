@@ -51,7 +51,7 @@ pipeline {
        agent {
                 docker {
                     image 'maven:3.5.2'
-                    args '-v /var/jenkins_home/workspace/test:/opt/maven -w /opt/maven'
+                    args '-v /var/jenkins_home/workspace/enkin-devops-microservice_master:/opt/maven -w /opt/maven'
                     reuseNode true
                 }
             }
