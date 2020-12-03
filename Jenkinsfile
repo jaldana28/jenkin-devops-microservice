@@ -45,7 +45,7 @@ pipeline {
       agent any
       steps {
         script {
-          app = docker.build("aldanar1/currency-exchange-devops")
+          app = docker.build("aldanar1/currency-exchange-devops:${env.BUILD_TAG}")
           app.inside {
             sh 'echo $(curl localhost:8000)'
           }
