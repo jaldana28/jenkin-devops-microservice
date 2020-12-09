@@ -50,8 +50,8 @@ pipeline {
       }
       steps {
         script {
-          sh "docker build  -t devops-microservice ."
-          sh "docker tag devops-microservice:latest 931914722589.dkr.ecr.us-east-1.amazonaws.com/devops-microservice:$env.BUILD_TAG"
+          sh "docker build  -t intercorp ."
+          sh "docker tag intercorp:latest 931914722589.dkr.ecr.us-east-1.amazonaws.com/intercorp:latest"
         }
 
       }
@@ -64,10 +64,9 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://931914722589.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ecr_deploy') {
-            docker.image("intercorp").push()
+                 sh "docker push 931914722589.dkr.ecr.us-east-1.amazonaws.com/intercorp:latest"
           }
         }
-
       }
     }
 
