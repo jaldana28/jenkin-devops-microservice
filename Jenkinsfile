@@ -49,7 +49,7 @@ pipeline {
       }
       steps {
         script {
-          sh "docker build  -t $env.ECR_URL/intercorp/devops-microservice:latest -f ."
+          sh "docker build  -t $env.ECR_URL/intercorp/devops-microservice:latest ."
         }
 
       }
