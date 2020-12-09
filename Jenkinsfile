@@ -12,7 +12,6 @@ pipeline {
         echo "BUILD_TAG - $env.BUILD_TAG"
         echo "BUILD_URL - $env.BUILD_URL"
         echo "ECR_URL -   $env.ECR_URL"
-        
       }
     }
 
@@ -63,8 +62,8 @@ pipeline {
       }
       steps {
         script {
-          docker.withRegistry('https://"$env.ECR_URL".us-east-1.amazonaws.com', 'ecr:us-east-1:ecr_deploy') {
-                docker.image("devops-microservice").push()
+          docker.withRegistry('https://931914722589.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ecr_deploy') {
+            docker.image("devops-microservice").push()
           }
         }
 
