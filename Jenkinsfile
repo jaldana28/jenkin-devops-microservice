@@ -63,7 +63,7 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://931914722589.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:ecr_deploy') {
-            docker.image("931914722589.dkr.ecr.us-east-1.amazonaws.com/intercorp").push()
+            docker.image("931914722589.dkr.ecr.us-east-1.amazonaws.com/intercorp/devops-microservice").push()
           }
         }
 
