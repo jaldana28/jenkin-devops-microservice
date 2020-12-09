@@ -57,7 +57,7 @@ pipeline {
             }
       steps {
         script {
-         sh "docker build --build-arg APP_NAME=devops-microservice -t "${env.ECR_URL}"/intercorp/devops-microservice:latest -f ."
+         sh "docker build --build-arg APP_NAME=devops-microservice -t $env.ECR_URL/intercorp/devops-microservice:latest -f ."
         }
 
       }
@@ -68,8 +68,8 @@ pipeline {
       }
       steps {
         script {
-          docker.withRegistry('https://'"${env.ECR_URL}"'.us-east-1.amazonaws.com', 'ecr_deploy') {
-                 sh "docker push ${env.ECR_URL}.us-east-1.amazonaws.com/devops-microservice:latest"
+          docker.withRegistry('https://$env.ECR_URL.us-east-1.amazonaws.com', 'ecr_deploy') {
+                 sh "docker push $env.ECR_URL.us-east-1.amazonaws.com/devops-microservice:latest"
         }
       }
     }
