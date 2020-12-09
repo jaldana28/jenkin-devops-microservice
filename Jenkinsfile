@@ -61,7 +61,7 @@ pipeline {
       }
       steps {
         script {
-          docker.withRegistry('https://$env.ECR_URL.us-east-1.amazonaws.com', 'ecr:us-east-1:ecr_deploy') {
+          docker.withRegistry('https://$env.ECR_URL.us-east-1.amazonaws.com', 'ecr:us-east-1:ecr_url') {
             sh "docker push $env.ECR_URL.us-east-1.amazonaws.com/devops-microservice:latest"
           }
         }
