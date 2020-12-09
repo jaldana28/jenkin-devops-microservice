@@ -57,29 +57,21 @@ pipeline {
             }
       steps {
         script {
-          app = docker.build("aldanar1/currency-exchange-devops:${env.BUILD_TAG}")
-          app.inside {
-            sh 'echo $(curl localhost:8000)'
-          }
+         sh "docker build --build-arg APP_NAME=devops-microservice -t "${env.ECR_URL}"/intercorp/devops-microservice:latest -f ."
         }
 
       }
     }
-
     stage('Push Docker Image') {
       agent {
         label 'master'
       }
       steps {
         script {
-          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-          }
+          docker.withRegistry('https://'"${env.ECR_URL}"'.us-east-1.amazonaws.com', 'ecr_deploy') {
+                 sh "docker push ${env.ECR_URL}.us-east-1.amazonaws.com/devops-microservice:latest"
         }
-
       }
     }
-
   }
 }
