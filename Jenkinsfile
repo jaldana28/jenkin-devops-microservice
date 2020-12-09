@@ -1,14 +1,5 @@
 pipeline {
   agent any
-  environment {
-		dockerHome = tool 'mydocker'
-		mavenHome = tool 'M3'
-		PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
-	}
-
-   tools {
-    maven 'M3'
-  }
   stages {
     stage('Checkout') {
       steps {
@@ -48,20 +39,22 @@ pipeline {
     }
 
     stage('Build Docker Image') {
-       agent {
-                docker {
-                    image 'maven:3.5.2'
-                    args '-v /var/jenkins_home/workspace/enkin-devops-microservice_master:/opt/maven -w /opt/maven'
-                    reuseNode true
-                }
-            }
+      agent {
+        docker {
+          image 'maven:3.5.2'
+          args '-v /var/jenkins_home/workspace/enkin-devops-microservice_master:/opt/maven -w /opt/maven'
+          reuseNode true
+        }
+
+      }
       steps {
         script {
-         sh "docker build --build-arg APP_NAME=devops-microservice -t $env.ECR_URL/intercorp/devops-microservice:latest -f ."
+          sh "docker build  -t $env.ECR_URL/intercorp/devops-microservice:latest -f ."
         }
 
       }
     }
+
     stage('Push Docker Image') {
       agent {
         label 'master'
@@ -69,10 +62,20 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://$env.ECR_URL.us-east-1.amazonaws.com', 'ecr_deploy') {
-                 sh "docker push $env.ECR_URL.us-east-1.amazonaws.com/devops-microservice:latest"
+            sh "docker push $env.ECR_URL.us-east-1.amazonaws.com/devops-microservice:latest"
+          }
         }
+
       }
     }
+
   }
-}
+  tools {
+    maven 'M3'
+  }
+  environment {
+    dockerHome = 'mydocker'
+    mavenHome = 'M3'
+    PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
+  }
 }
