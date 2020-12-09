@@ -11,6 +11,8 @@ pipeline {
         echo "JOB_NAME - $env.JOB_NAME"
         echo "BUILD_TAG - $env.BUILD_TAG"
         echo "BUILD_URL - $env.BUILD_URL"
+        echo "ECR_URL -   $env.ECR_URL"
+        
       }
     }
 
@@ -62,7 +64,7 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://$env.ECR_URL.us-east-1.amazonaws.com', 'ecr:us-east-1:ecr_deploy') {
-            sh "docker push $env.ECR_URL.us-east-1.amazonaws.com/devops-microservice:latest"
+                docker.image("devops-microservice").push()
           }
         }
 
